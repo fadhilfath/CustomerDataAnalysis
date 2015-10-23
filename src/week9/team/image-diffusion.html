@@ -133,10 +133,13 @@ function solution4(){
 }
 
 function solution5(){
-    var re = _.filter(items,function(n){
-        var st = n["* Original Tweet Created At"].split(" ")
-        return n[0]    
+
+
+    var result = _.filter(items,function(d){
+        return _.includes(d['* Original Tweet Created At'],"4/26/15")
     })
+
+    return result.length
 
     /*var s = _.filter(re,function(d){
         return (d.Rt == "Original Tweet (probably)")
@@ -144,8 +147,7 @@ function solution5(){
     var result = _.filter(s,function(n){
         return n == '4/26/15'
     }).length*/
-    
-    console.log(re)
+
     
 }
 
@@ -153,7 +155,7 @@ function solution6(){
 
     var re = _.filter(items,function(n){
         var st = n["* Original Tweet Created At"].split(" ")
-            return st[0]
+        return st[0] 
     })
 
     var groups = _.groupBy(re,function(n){
@@ -164,12 +166,19 @@ function solution6(){
         return n.length
     })
     
-    console.log(groups)
+    console.log(re)
     console.log(_.max(_.values(m)))
     return _.max(_.values(m))
 }
 
 function solution7(){
+
+    var result = _.filter(items,function(d){
+        return _.includes(d['* Original Tweet Created At'],"4/26/15")
+    })
+
+    console.log(result)
+
     return 'TODO'
 }
 
