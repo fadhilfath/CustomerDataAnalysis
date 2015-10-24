@@ -157,7 +157,7 @@
               return d.CrsPBADept == 'CSCI'
             })
             var gpa = _.groupBy(csci,'CrsLvlNum')
-            var course = _.mapValues(gpa,function(n){
+            var courseCsci = _.mapValues(gpa,function(n){
               return n.length
             })
 
@@ -171,14 +171,14 @@
             })
 
           
-            var cs = _.keys(course)
-            var csNum = _.values(course)
+            var cs = _.keys(courseCsci)
+            var csNum = _.values(courseCsci)
 
             var hs = _.keys(histCourse)
             var hsNum = _.values(histCourse)
             
+            console.log(courseCsci)
             console.log(histCourse)
-            console.log(course)
             
             var data = {
                   labels: four,

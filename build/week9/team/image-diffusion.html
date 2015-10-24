@@ -88,12 +88,11 @@ function solution1(){
 }
 
 function solution2(){
-    var groups = _.groupBy(items,'* Original Tweet Created At')
-    var result = _.mapValues(groups,function(n){
-        return n.length
+    var un = _.uniq(items,function(n){
+        return n['Original User Name']
     })
-    console.log(_.size(result))
-    return _.size(result)
+    console.log(_.size(un))
+    return _.size(un)
 }
 
 function solution3(){
@@ -134,20 +133,11 @@ function solution4(){
 
 function solution5(){
 
+        var m =  _.filter(items, function(d){
+            return ( d["Rt"] == "Original Tweet (probably)" && _.startsWith(d["* Tweet Created At"],"4/26/15 "))
+        });
 
-    var result = _.filter(items,function(d){
-        return _.includes(d['* Original Tweet Created At'],"4/26/15")
-    })
-
-    return result.length
-
-    /*var s = _.filter(re,function(d){
-        return (d.Rt == "Original Tweet (probably)")
-    })
-    var result = _.filter(s,function(n){
-        return n == '4/26/15'
-    }).length*/
-
+        return _.size(m)
     
 }
 
@@ -172,14 +162,35 @@ function solution6(){
 }
 
 function solution7(){
+    var m =  _.filter(items, function(d){
+        return ( d["Rt"] == "Original Tweet (probably)"
+            && _.startsWith(d["* Tweet Created At"],"4/26/15 "))
+    });
 
-    var result = _.filter(items,function(d){
-        return _.includes(d['* Original Tweet Created At'],"4/26/15")
+    m = _.uniq(m,function(d){
+        return d["Image Id Str"];
     })
 
-    console.log(result)
+    
+    var retweet =  _.filter(items, function(d){
+        return ( d["Rt"] == "Retweet")
+        })
+    var groups = _.groupBy(retweet,"Image Id Str")
+    
+    var size = _.size(groups);
+    var counts = _.map(m, function(d){
+        var count = _.size(groups[d["Image Id Str"]]);
+        var obj = {ID:d["Image Id Str"], count:count}
+        return obj;
+    })
 
-    return 'TODO'
+    var s = _.sum(counts,function(n){
+        return n.count
+    })
+
+    console.log(s / _.size(counts))
+
+    return s / _.size(counts);
 }
 
 function solution8(){
@@ -189,17 +200,74 @@ function solution8(){
 
     // hints: you may need to use these methods to get an one hour window
     // http://momentjs.com/docs/#/durations/add/
-    // http://momentjs.com/docs/#/query/is-before/
+    // http://momentjs.com/docs/#/query/is-before
+
+     var ma = _.filter(items, function(n){
+        return n['* Original Tweet Created At'].split(' ')[0] == '4/26/15' && n.Rt == 'Retweet'
+    })
+
+    console.log(ma)
+    var t = _.filter(ma, function(n){ 
+        orig =  new Date(n['* Original Tweet Created At'])
+        retweet =  new Date(n['* Tweet Created At'])
+        
+        o = moment(orig)
+        p = o.add(1,'hour')
+        r = moment(retweet)    
+        return r < p
+    })  
+    var groups = _.groupBy(t, 'Image Id Str')
+    var na = _.mapValues(groups, function(n){
+        return n.length
+    })
+    return _.size(na)
+
     console.log(momentCreatedAt)
-    return 'TODO'
 }
 
 function solution9(){
-    return 'TODO'
+
+    var m =  _.filter(items, function(d){
+        return ( d["Rt"] == "Original Tweet (probably)"
+            && _.startsWith(d["* Tweet Created At"],"4/26/15 "))
+    });
+
+    var n = _.filter(items,function(d){
+        return d.Rt == 'Retweet'
+    })
+
+    //console.log(n)
+
+
+    var groups = _.groupBy(n,"Image Id Str")
+    console.log(groups)
+
+
+    var res = _.mapValues(groups,function(d){
+        return d.length
+    })
+
+    var pairRes = _.pairs(res)
+    console.log(pairRes)
+
+    var ma = _.sortBy(pairRes, function(d){
+        return d[1]
+    }).reverse()
+
+    var ten = _.slice(ma,0,10)
+    console.log(ten)
+
+    return _.values(ten)
 }
 
 function solution10(){
-    return 'TODO'
+     // "http://pbs.twimg.com/media/CDhv7F0UUAAg9J9.jpg"
+     // "http://pbs.twimg.com/media/CDe9RPUWYAAKBJ2.jpg"
+     // "http://pbs.twimg.com/media/CDezYowWMAAUgUR.jpg"
+     // "http://pbs.twimg.com/media/CDg49Z1W0AE9mN7.jpg"
+     // "http://pbs.twimg.com/media/CDe_oTKW0AAqgZJ.jpg"
+
+    return 5
 }
 
 function run(id, solutionFunc, data){
