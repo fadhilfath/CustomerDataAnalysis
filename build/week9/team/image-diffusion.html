@@ -95,7 +95,7 @@ function solution2(){
     return _.size(un)
 }
 
-function solution3(){
+function solution3(){  
     var na = _.filter(items,function(n){
         return (n['Image Id Str'] == 592674938273865700) 
     })
@@ -144,9 +144,10 @@ function solution5(){
 function solution6(){
 
     var re = _.filter(items,function(n){
-        var st = n["* Original Tweet Created At"].split(" ")
-        return st[0] 
+        return n["* Original Tweet Created At"].split(" ")[0] && n.Rt == "Original Tweet (probably)"
     })
+
+    console.log(re)
 
     var groups = _.groupBy(re,function(n){
         return n['Image Id Str']
