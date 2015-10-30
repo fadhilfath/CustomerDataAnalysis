@@ -84,6 +84,7 @@ function has_at_least_ten_businesses_with_100_or_more_reviews_within_one_mile(lo
 }
 
 //Is there any restaurants with 3 stars or less ? (fadhil suhendi)
+// TODO: Add more scoring functions
 
 function has_some_restaurants_with_3_stars_or_less(loc){
   // TODO
@@ -100,7 +101,7 @@ function has_some_restaurants_with_3_stars_or_less(loc){
   console.log(lessThanThree)
 
 
-  return lessThanThree.length > 0
+  return lessThanThree.length > 20
 }
 
 function has_some_laundry(loc){
@@ -151,7 +152,6 @@ function has_library(loc){
   console.log(library)
   return library.length > 0
 }
-// TODO: Add more scoring functions
 
 //
 // Compute a score for a location using the provided scoring function 'scoreFunc'
