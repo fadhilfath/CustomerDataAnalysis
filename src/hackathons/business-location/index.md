@@ -54,8 +54,7 @@ hackathon.
 
 ### Business Type
 
-Our team chose to analyze candidate locations for (fill in the business type).
-
+Our team chose to analyze candidate locations for a new 24-hours diner
 ### Contributors
 
 The team members who contributed to this hackathon are:
@@ -134,24 +133,47 @@ Our team came up with the following relevant questions:
 
   (one sentence justification why this question is important)
 
-17. Are there any dry/cleaning or laundry businesses within 2 kilometers ? contributed by (Name)
+17. Is there any restaurants with 3 stars or less within 2 kilometers ? contributed by (Fadhil Suhendi)
 
-  (one sentence justification why this question is important)
+  You don’t want highly-rated competition nearby.
 
-18. Are there any elementry/high schools within 2 kilometers ? contributed by (Name)
+18. Are there any dry/cleaning or laundry businesses within 2 kilometers ? contributed by (Fadhil Suhendi)
 
-  (one sentence justification why this question is important)
+  When people do their laundry late at night, they may get hungry
 
-19. Are there any religious organization within 2 kilometers ? contributed by (Name)
+19. Are there any religious organization within 2 kilometers ? contributed by (fadhil suhendi)
 
-  (one sentence justification why this question is important)
+  There are many people who have late night prayer
 
-20. Are there any libraries within 2 kilometers ? contributed by (Name)
-
-  (one sentence justification why this question is important)
+20. Are there any libraries within 2 kilometers ? contributed by (fadhil suhendi)
+  Some people might get hungry after studying
 
 ### Conclusion
 
 Our team collectively has implemented (N) scoring functions. Based on
 the scores, our team recommends location (1, 2, 3, 4, 5, or 6 from west to east),
 because it receives (m) out of (N) possible scores.
+
+Question|Site 1|Site 2|Site 3|Site 4|Site 5|Site 6
+--------|------|------|------|------|------|------
+Q1|yes|yes|no|no|no|no
+Q2|no|no|no|yes|yes|yes
+Q3|no|no|yes|yes|yes|yes
+Q4|no|no|yes|yes|yes|yes
+Q5|no|no|no|no|no|no
+Q6|no|no|no|no|no|no
+Q7|no|no|no|no|no|no
+Q8|no|no|no|no|no|no
+Q9|no|no|no|no|no|no
+Q10|no|no|no|no|no|no
+Q11|no|no|no|no|no|no
+Q12|no|no|no|no|no|no
+Q13|no|no|no|no|no|no
+Q14|no|no|no|no|no|no
+Q15|no|no|no|no|no|no
+Q16|no|no|no|no|no|no
+Q17|yes|yes|yes|no|no|no
+Q18|yes|yes|yes|no|no|yes
+Q19|yes|yes|yes|yes|no|yes
+Q20|yes|yes|yes|yes|yes|yes
+TOTALS|5|5|6|5|4|6
