@@ -12,7 +12,7 @@
 
 <div class="container">
 
-    <h1>Where should we build X?</h1>
+    <h1>Where should we build new sushi buffet?</h1>
 
     <section id="candidates" class="question">
         <h4>Where are the candidate locations?</h4>
@@ -52,29 +52,84 @@ function getCandidateLocations(){
 // Scoring Functions
 //
 
-function has_some_feature_1(loc){
+function are_there_any_other_sushi_buffet_around(loc){
   // TODO
-  return true
+  var nearbyBusinesses = _.filter(items, function(item){
+    var loc2  = _.pick(item, ['latitude', 'longitude'])
+    var d = geolib.getDistance(loc, loc2)
+    return d/1000 < 2
+  })
+
+  var sushi = _.filter(nearbyBusinesses,function(n){
+    return n.categories.indexOf('Sushi Bars') > -1
+  })
+
+  console.log(sushi)
+  return sushi.length > 0
 }
 
-function has_some_feature_2(loc){
+function are_there_any_shopping_center_around(loc){
   // TODO
-  return false
+  var nearbyBusinesses = _.filter(items, function(item){
+    var loc2  = _.pick(item, ['latitude', 'longitude'])
+    var d = geolib.getDistance(loc, loc2)
+    return d/1000 < 2
+  })
+
+  var shop = _.filter(nearbyBusinesses,function(n){
+    return n.categories.indexOf('Shopping') > -1
+  })
+
+  console.log(shop)
+  return shop.length > 0
 }
 
-function has_some_feature_3(loc){
+function are_there_any_buffet_restaurant_with_3_stars_or_more(loc){
   // TODO
-  return true
+  var nearbyBusinesses = _.filter(items, function(item){
+    var loc2  = _.pick(item, ['latitude', 'longitude'])
+    var d = geolib.getDistance(loc, loc2)
+    return d/1000 < 2
+  })
+
+  var buffet = _.filter(nearbyBusinesses,function(n){
+    return n.categories.indexOf('Buffets') > -1 && n.stars > 3
+  })
+
+  console.log(buffet)
+  return buffet.length > 0
 }
 
-function has_some_feature_4(loc){
+function are_there_any_fast_food_restaurant_around(loc){
   // TODO
-  return false
+  var nearbyBusinesses = _.filter(items, function(item){
+    var loc2  = _.pick(item, ['latitude', 'longitude'])
+    var d = geolib.getDistance(loc, loc2)
+    return d/1000 < 2
+  })
+
+  var fast = _.filter(nearbyBusinesses,function(n){
+    return n.categories.indexOf('Fast Food') > -1 
+  })
+
+  console.log(fast)
+  return fast.length > 0
 }
 
-function has_some_feature_5(loc){
+function are_there_any_community_service_around(loc){
   // TODO
-  return false
+  var nearbyBusinesses = _.filter(items, function(item){
+    var loc2  = _.pick(item, ['latitude', 'longitude'])
+    var d = geolib.getDistance(loc, loc2)
+    return d/1000 < 2.5
+  })
+
+  var comm = _.filter(nearbyBusinesses,function(n){
+    return n.categories.indexOf('Community Service/Non-Profit') > -1 || n.categories.indexOf('Local Services') > -1
+  })
+
+  console.log(comm)
+  return comm.length > 20
 }
 
 //
@@ -168,18 +223,18 @@ function loadDataThenRunSolutions(){
 
       // take only the last 2000 to speed up computation
       // TODO: comment this out before the final submission
-      items = _.takeRight(items, 2000)
+      //items = _.takeRight(items, 2000)
 
       console.log('number of items loaded:', items.length)
       console.log('first item:', items[0])
 
       console.log('scoring all candidate locations')
 
-      scoreAndVisualize(locs, has_some_feature_1, visualize_true_or_false)
-      scoreAndVisualize(locs, has_some_feature_2, visualize_true_or_false)
-      scoreAndVisualize(locs, has_some_feature_3, visualize_true_or_false)
-      scoreAndVisualize(locs, has_some_feature_4, visualize_true_or_false)
-      scoreAndVisualize(locs, has_some_feature_5, visualize_true_or_false)
+      scoreAndVisualize(locs, are_there_any_other_sushi_buffet_around, visualize_true_or_false)
+      scoreAndVisualize(locs, are_there_any_shopping_center_around, visualize_true_or_false)
+      scoreAndVisualize(locs, are_there_any_buffet_restaurant_with_3_stars_or_more, visualize_true_or_false)
+      scoreAndVisualize(locs, are_there_any_fast_food_restaurant_around, visualize_true_or_false)
+      scoreAndVisualize(locs, are_there_any_community_service_around, visualize_true_or_false)
 
    })
    .fail(function(err){
