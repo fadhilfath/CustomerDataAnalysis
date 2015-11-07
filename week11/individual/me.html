@@ -1,0 +1,393 @@
+<html>
+<head>
+  <title>Me</title>
+    <style>
+        .answer {
+            min-height: 50px
+        }
+        section{
+          padding: 10px;
+          margin-bottom: 12px
+        }
+        #title {
+          position: absolute;
+          padding: 20px;
+          font-size: 64px;
+          font-weight: bolder;
+          color: white;
+          top: 50px;
+          left: 0px;
+          text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black
+        }
+        #title .authors {
+          padding: 20px;
+          font-size: 32px;
+          font-weight: bolder;
+          color: #BBB;
+          text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black
+        }
+        #tweets {
+          min-height: 300px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/css/materialize.min.css">
+</head>
+<body>
+
+  <div class="parallax-container"  style="height:300px">
+    <div class="parallax">
+      <img src="cloud.jpg">
+      <h1 id="title">What is my online activity?
+        <div class="authors">by Fadhil Suhendi</div>
+      </h1>
+    </div>
+  </div>
+
+  <div class="section white container flow-text">
+      <div id="questions" class="col s10 collection">
+      </div>
+  </div>
+
+  <script src="https://cdn.firebase.com/js/client/2.3.1/firebase.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/js/materialize.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js"></script>
+  <script>
+
+// TODO: replace the FIREBAW_URL with your own
+var PERSONAL_FIREBASE_URL = 'https://fadhilfath-bigdata-hci.firebaseio.com/'
+
+// add the personal firebase url to the class's firebase
+
+// load events from the personal firebase
+var personal_firebase = new Firebase(PERSONAL_FIREBASE_URL)
+personal_firebase
+  .child('events')
+  .on('value', function(snapshot){
+    var events = snapshot.val()
+    analyze(events)
+})
+
+function ask(func, events){
+  var answer = func(events)
+
+  // html element to display the answer
+  var answerHtml = '<div class="collection-item answer">' +
+      '<h4>' + _.startCase(func.name) + '? </h4>' +
+      '<div>' + answer + '</div>'
+    '</div>'
+
+  // append to #quetions
+  $('#questions').append(answerHtml)
+}
+
+function analyze(events){
+  console.log(events)
+
+  ask(when_did_i_start_collecting, events)
+  ask(how_many_emails_have_i_received_since, events)
+  ask(how_many_emails_have_i_received_in_nov_6, events)
+  ask(how_many_emails_have_i_received_between_4_to_5_pm, events)
+  ask(how_many_emails_have_i_received_between_6_to_8_pm, events)
+  ask(how_many_emails_i_recieve_today, events)
+  ask(how_many_emails_I_recieve_in_the_morning, events)
+  ask(How_many_emails_have_I_received_in_Nov_7, events)
+  ask(How_many_emails_I_received_in_Nov_6_At_Night, events)
+  ask(How_many_emails_I_receive_last_month, events)
+  ask(How_many_emails_I_receive_yesterday, events)
+  ask(How_many_emails_I_received_yesterday_above_6_pm, events)
+}
+
+function when_did_i_start_collecting(events){
+  return 'I started collecting from [TODO: earliest timestamp].'
+}
+
+function how_many_emails_have_i_received_since(events){
+  return 'I received ' + _.values(events.gmail).length + ' emails.'
+}
+
+function how_many_emails_have_i_received_in_nov_6(events){
+ 
+  var v = _.pairs(events.gmail)
+  var d = _.map(v,function(n){
+    return n[1]["Date"].split(" ")
+  })
+  console.log(d)
+  var date = _.filter(d,function(m){
+    return m[2] === 'Nov' && m[1] === '6'
+  }).length
+  console.log(date)
+  return date
+}
+
+function how_many_emails_have_i_received_between_4_to_5_pm(events){
+  console.log("4 to 5")
+  var v = _.pairs(events.gmail)
+  var d = _.map(v,function(n){
+    return n[1]["Date"].split(" ")
+  })
+  var time = _.map(d,function(n){
+    return n[4].split(":")
+  })
+  console.log(time)
+
+  var par = _.map(time,function(n){
+    return parseInt(n[0])
+  })
+  console.log(par)
+
+  var fil = _.filter(par,function(d){
+    return d <= 17 && d >= 16
+  }).length
+
+  console.log(fil)
+  return fil
+}
+
+function how_many_emails_have_i_received_between_6_to_8_pm(events){
+  console.log("6 to 8")
+  var v = _.pairs(events.gmail)
+  var d = _.map(v,function(n){
+    return n[1]["Date"].split(" ")
+  })
+  var time = _.map(d,function(n){
+    return n[4].split(":")
+  })
+  console.log(time)
+
+  var par = _.map(time,function(n){
+    return parseInt(n[0])
+  })
+
+  var fil = _.filter(par,function(d){
+    return d <= 20 && d >= 18
+  }).length
+  return fil
+}
+
+function how_many_emails_i_recieve_today(events){
+  console.log("today")
+  var date = new Date()
+  //var m = date.getMonth()+1;
+  //var d = date.getDay();
+  //var y = date.getYear();
+  var month=[];
+    month[0] = "Jan"
+    month[1] = "Feb"
+    month[2] = "Mar"
+    month[3] = "Apr"
+    month[4] = "May"
+    month[5] = "Jun"
+    month[6] = "Jul"
+    month[7] = "Aug"
+    month[8] = "Sep"
+    month[9] = "Oct"
+    month[10] = "Nov"
+    month[11] = "Dec"
+
+  console.log(date)
+
+  
+  var v = _.pairs(events.gmail)
+  var d = _.map(v,function(n){
+    return n[1]["Date"].split(" ")
+  })
+  console.log(d)
+  var da = date.getDate() + " " + month[date.getMonth()]
+  console.log(v) 
+
+  var dat = _.map(v,function(m){
+    return m[1]['Date'].split(" ")[1] + " " + m[1]['Date'].split(" ")[2]
+  })
+  console.log(dat)
+
+  var result = _.filter(dat,function(n){
+    return da === n
+  }).length
+  console.log(result)
+
+  return result
+}
+
+function how_many_emails_I_recieve_in_the_morning(events){
+  var v = _.pairs(events.gmail)
+  var d = _.map(v,function(n){
+    return n[1]["Date"].split(" ")
+  })
+  var time = _.map(d,function(n){
+    return n[4].split(":")
+  })
+
+  var par = _.map(time,function(n){
+    return parseInt(n[0])
+  })
+
+  var fil = _.filter(par,function(d){
+    return d <= 12 && d >= 6
+  }).length
+  return fil
+}
+
+function How_many_emails_have_I_received_in_Nov_7(events){
+  var v = _.pairs(events.gmail)
+  var d = _.map(v,function(n){
+    return n[1]["Date"].split(" ")
+  })
+  console.log(d)
+  var date = _.filter(d,function(m){
+    return m[2] === 'Nov' && m[1] === '7'
+  }).length
+  console.log(date)
+  return date
+}
+
+function How_many_emails_I_received_in_Nov_6_At_Night(events){
+  console.log("question 7")
+  var v = _.pairs(events.gmail)
+  var d = _.map(v,function(n){
+    return n[1]["Date"].split(" ")
+  })
+  console.log(d)
+  var date = _.filter(d,function(m){
+    return m[2] === 'Nov' && m[1] === '6'
+  })
+
+  console.log(date)
+
+  var time = _.map(date,function(n){
+    return n[4].split(":")
+  })
+
+  var par = _.map(time,function(n){
+    return parseInt(n[0])
+  })
+
+  var fil = _.filter(par,function(d){
+    return d <= 23 && d >= 18
+  }).length
+  return fil
+
+}
+
+function How_many_emails_I_receive_last_month(events){
+    // creating array of month
+    var month=[];
+    month[0] = "Jan"
+    month[1] = "Feb"
+    month[2] = "Mar"
+    month[3] = "Apr"
+    month[4] = "May"
+    month[5] = "Jun"
+    month[6] = "Jul"
+    month[7] = "Aug"
+    month[8] = "Sep"
+    month[9] = "Oct"
+    month[10] = "Nov"
+    month[11] = "Dec"
+
+
+
+  var date = new Date()
+  var lastMonth = date.getMonth() - 1
+
+  var v = _.pairs(events.gmail)
+  var d = _.map(v,function(m){
+    return m[1]["Date"].split(" ")
+  })
+
+  var fil = _.filter(d,function(n){
+    return n[2] == month[lastMonth]
+  }).length
+  console.log(d)
+  console.log(fil)
+
+  return fil
+}
+
+function How_many_emails_I_receive_yesterday(events){
+  console.log("yesterday")
+  // creating array of month
+    var days=[];
+    days[0] = "Sun,"
+    days[1] = "Mon,"
+    days[2] = "Tue,"
+    days[3] = "Wed,"
+    days[4] = "Thu,"
+    days[5] = "Fri,"
+    days[6] = "Sat,"
+    
+
+  var date = new Date()
+  var yesterday = date.getDay() - 1
+  var yes = yesterday.toString();
+  console.log(yesterday)
+
+  var v = _.pairs(events.gmail)
+  var d = _.map(v,function(m){
+    return m[1]["Date"].split(" ")
+  })
+
+  var fil = _.filter(d,function(n){
+    return n[1] === days[yesterday]
+  }).length
+  console.log(d)
+  console.log(fil)
+
+  return fil
+}
+
+function How_many_emails_I_received_yesterday_above_6_pm(events){
+  console.log("lastyear")
+  // creating array of month
+    var days=[];
+    days[0] = "Sun,"
+    days[1] = "Mon,"
+    days[2] = "Tue,"
+    days[3] = "Wed,"
+    days[4] = "Thu,"
+    days[5] = "Fri,"
+    days[6] = "Sat,"
+    
+
+  var date = new Date()
+  var yesterday = date.getDay() - 1
+  var yes = yesterday.toString();
+  console.log(yesterday)
+
+  var v = _.pairs(events.gmail)
+  var d = _.map(v,function(m){
+    return m[1]["Date"].split(" ")
+  })
+
+  var fil = _.filter(d,function(n){
+    return n[1] === days[yesterday]
+  })
+
+  var time = _.map(fil,function(n){
+    return n[4].split(":")
+  })
+
+  var par = _.map(time,function(n){
+    return parseInt(n[0])
+  })
+
+  var fil = _.filter(par,function(d){
+    return d <= 18
+  }).length
+
+  console.log(fil)
+
+  return fil
+}
+
+// initialize the parallax effect
+$(document).ready(function(){
+    $('.parallax').parallax()
+})
+
+    </script>
+
+</body>
+</html>
