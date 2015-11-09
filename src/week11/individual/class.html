@@ -38,7 +38,7 @@
     <div class="parallax">
       <img src="cloud.jpg">
       <h1 id="title">What is everyone in the class's activity?
-        <div class="authors">by Name</div>
+        <div class="authors">by fadhil suhendi</div>
       </h1>
     </div>
   </div>
@@ -121,16 +121,16 @@ function analyze(events){
 
   ask(how_many_individuals_analyzed_so_far, events)
   ask(whose_data_is_available, events)
-  ask(question1, events)
-  ask(question2, events)
-  ask(question3, events)
-  ask(question4, events)
-  ask(question5, events)
-  ask(question6, events)
-  ask(question7, events)
-  ask(question8, events)
-  ask(question9, events)
-  ask(question10, events)
+  ask(how_many_students_use_twitter_for_their_online_account, events)
+  ask(how_many_students_use_more_than_1_online_account, events)
+  ask(what_is_the_highest_number_of_events, events)
+  ask(who_has_highest_number_of_events, events)
+  ask(how_many_students_include_github_for_their_online_account, events)
+  ask(who_has_lowest_number_of_events, events)
+  ask(total_number_of_events_from_all_students, events)
+  ask(total_number_of_events_from_gmail, events)
+  ask(how_many_students_include_youtube_for_their_online_account, events)
+  ask(how_many_students_include_trello_for_their_online_account, events)
 }
 
 function how_many_individuals_analyzed_so_far(events){
@@ -141,44 +141,177 @@ function whose_data_is_available(events){
   return _.keys(events).join(' , ')
 }
 
-function question1(events){
-  return '...'
+function how_many_students_use_twitter_for_their_online_account(events){
+  //var ev = _.values(events[0]['gmail']).length
+  var twitter = _.filter(events,function(n){
+    return _.includes(_.keys(n),'twitter')
+  }).length
+  console.log(twitter)
+  // _.pairs(events)[0]['gmail'].length
+  //console.log(_.keys(events))
+  //console.log(ev)
+  return twitter
+  
 }
 
-function question2(events){
-  return '...'
+function how_many_students_use_more_than_1_online_account(events){
+  var m = _.mapValues(events,function(n){
+    return _.pairs(n)
+  })
+
+  var p = _.filter(m,function(d){
+    return d.length > 1
+  }).length
+  console.log("try")
+  console.log(m)
+  console.log(p)
+
+  return p
 }
 
-function question3(events){
-  return '...'
+function what_is_the_highest_number_of_events(events){
+
+  var m = _.mapValues(events,function(m){
+    return _.sum(_.pairs(m),function(n){
+      return _.values(n[1]).length
+    })
+  })
+
+  /*
+  var map = _.filter(events,function(d){
+    return _.includes(_.keys(d),'github')
+  })
+
+  var d = _.mapValues(map,function(d){
+    return d['github']
+  })
+
+  var tot = _.sum(_.keys(d))
+
+  */
+  console.log("total")
+  console.log(m)
+  console.log(_.max(m))
+  return _.max(m)
 }
 
-function question4(events){
-  return '...'
+function who_has_highest_number_of_events(events){
+   var m = _.mapValues(events,function(m){
+    return _.sum(_.pairs(m),function(n){
+      return _.values(n[1]).length
+    })
+  })
+  console.log(m)
+  var high = _.map(m,function(d,k){
+    return {"name":k,"num":d}
+  })
+  
+  var sort = _.sortBy(high,function(n){
+    return n['num']
+  }).reverse()
+  console.log(sort)
+  console.log("highest person")
+  console.log(sort[0]['name'])
+  return sort[0]['name']
 }
 
-function question5(events){
-  return '...'
+function how_many_students_include_github_for_their_online_account(events){
+  var github = _.filter(events,function(n){
+    return _.includes(_.keys(n),'github')
+  }).length
+  console.log(github)
+  // _.pairs(events)[0]['gmail'].length
+  //console.log(_.keys(events))
+  //console.log(ev)
+
+  return github
 }
 
-function question6(events){
-  return '...'
+function who_has_lowest_number_of_events(events){
+  var m = _.mapValues(events,function(m){
+    return _.sum(_.pairs(m),function(n){
+      return _.values(n[1]).length
+    })
+  })
+  console.log(m)
+  var high = _.map(m,function(d,k){
+    return {"name":k,"num":d}
+  })
+  
+  var sort = _.sortBy(high,function(n){
+    return n['num']
+  })
+  console.log(sort)
+  
+  return sort[0]['name']
 }
 
-function question7(events){
-  return '...'
+function total_number_of_events_from_all_students(events){
+  var m = _.mapValues(events,function(m){
+    return _.sum(_.pairs(m),function(n){
+      return _.values(n[1]).length
+    })
+  })
+  console.log(m)
+  var high = _.map(m,function(d,k){
+    return {"name":k,"num":d}
+  })
+  
+  var map = _.map(high,function(n){
+    return n['num']
+  })
+  console.log("total")
+
+  console.log(_.sum(map))
+  return _.sum(map)
 }
 
-function question8(events){
-  return '...'
+function total_number_of_events_from_gmail(events){
+  var fil = _.filter(events,function(n){
+    return _.includes(_.keys(n),'gmail')
+  })
+
+  var map = _.map(fil,function(d){
+    return d["gmail"]
+  })
+
+
+  var m = _.mapValues(map,function(m){
+    return _.sum(_.pairs(m),function(n){
+      return _.values(n[1]).length
+    })
+  })
+
+  console.log("gmail")
+  console.log(m)
+  console.log(fil)
+  console.log(_.sum(_.values(m)))
+  //console.log(map)
+  return _.sum(_.values(m))
 }
 
-function question9(events){
-  return '...'
+function how_many_students_include_youtube_for_their_online_account(events){
+  var youtube = _.filter(events,function(n){
+    return _.includes(_.keys(n),'youtube')
+  }).length
+  console.log(youtube)
+  // _.pairs(events)[0]['gmail'].length
+  //console.log(_.keys(events))
+  //console.log(ev)
+
+  return youtube
 }
 
-function question10(events){
-  return '...'
+function how_many_students_include_trello_for_their_online_account(events){
+  var trello = _.filter(events,function(n){
+    return _.includes(_.keys(n),'trello')
+  }).length
+  console.log(trello)
+  // _.pairs(events)[0]['gmail'].length
+  //console.log(_.keys(events))
+  //console.log(ev)
+
+  return trello
 }
 
 
