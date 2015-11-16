@@ -18,7 +18,7 @@ principles:
 - The price change does not happen immediately; it will take effect after 2 to 5 tweets
 - When a word _x_ is said, the price is changed by _d(x)_.
 - Only these words matter:
-  - game, news, money, fun, good, actor, news, movies, tech, music, people, apple, google
+  - game, news, money, fun, good, actor, movies, tech, music, people, apple, google
 
 ## Bot
 
@@ -48,7 +48,7 @@ negative. Your challenge is to guess or estimate them.
 
 A history of about 10000 tweets and prices is provided for testing purposes.
 While you are developing the code for your bot, you can test its performance against
-this history data to see how much profit it wold have generated.
+this history data to see how much profit it would have generated.
 
 ## Live Data
 
