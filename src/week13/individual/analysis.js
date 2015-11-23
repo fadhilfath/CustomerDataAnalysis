@@ -75,17 +75,25 @@ function example3(){
 
 function func1(){
   console.log(items)
-  var nonzero = _.groupBy(items, function(n){
-    return n.Ping_index
+  var nonzero = _.map(items, function(n){
+    return n.Samples
   })
 
+  var v = _.flatten(nonzero)
+
+  var nz = _.filter(v,function(n){
+    return n > 0
+  })
+
+  var un = _.uniq(nz)
 
 
-  console.log("nonzero",nonzero)
-  return '...'
+  console.log("nonzero",un)
+  return "There are " + un.length + " non zero and non negative." + un
 }
 
 function func2(){
+  console.log(items)
   return '...'
 }
 
@@ -98,7 +106,7 @@ function func3(){
     return parseInt(n.Ping_index)
   })
   console.log("ping_index",ping_index)
-  var sample = _.filter(items[ping_index + 1].Samples,function(d){
+  var sample = _.filter(items[ping_index - 1].Samples,function(d){
     return d == 7
   }).length
   console.log("value 7",sample)
@@ -106,15 +114,84 @@ function func3(){
 }
 
 function func4(){
-  return '...'
+  var nonzero = _.groupBy(items, function(n){
+    return n.Ping_index
+  })
+
+  var n = _.mapValues(nonzero,function(n){
+    return _.filter(n[0].Samples,function(d){
+      return d == 3
+    }).length
+  })
+
+  var ma = _.map(n)
+  var d = _.max(n)
+  var p = _.findIndex(ma,function(p){
+    return p == d
+  })
+  //console.log("index", p+1)
+  //console.log(n)
+  return "It is in the measurement " + (p + 1)
 }
 
 function func5(){
-  return '...'
+  var greaterzero = _.groupBy(items, function(n){
+    return n.Ping_index
+  })
+
+  var n = _.mapValues(greaterzero,function(n){
+    return _.filter(n[0].Samples,function(d){
+      return d > 0
+    }).length
+  })
+
+  var fil = _.filter(n,function(d){
+    return d == 0
+  }).length
+  //console.log(fil)
+  return "There are " + fil + " measurements that dont have sample value greater than 0"
 }
 
 function func6(){
-  return '...'
+
+  var greaterzero = _.map(items,function(n){
+    return _.uniq(_.filter(n.Samples,function(p){
+      return p > 0
+    }))
+  })
+
+  var gr = _.flatten(greaterzero,_.value)
+  var group = _.groupBy(gr,_.value)
+  var mValue = _.mapValues(group,function(n){
+    return _.map(n,function(d){
+      return d
+    }).length
+  })
+
+  
+  var ma = _.pairs(mValue)
+  var m = _.sortBy(ma,function(n){
+    return n[1]
+  })
+  var revers = m.reverse()
+
+  /*
+  var n = _.mapValues(greaterzero,function(n){
+    return _.filter(n[0].Samples,function(d){
+      return d > 0
+    }).length
+  })*/
+  /*
+  var p = _.map(n)
+  var na = _.max(n)
+  var pa = _.findIndex(p,function(item){
+    return item == na
+  })*/
+  //console.log("vil",ma)
+  //console.log("key",m)
+  //console.log(revers[0][0])
+  return revers[0][0]
+  
 }
 
 function func7(){
@@ -128,6 +205,12 @@ function func7(){
   var el = $(this).find('.viz')[0]    // lookup the element that will hold the map
   $(el).height(500) // set the map to the desired height
   var map = createMap(el, pos, 5)
+
+  var new_york = { latitude:40.7127,longitude:74.0059 }
+
+
+  console.log(minLonglit)
+
 
   var circle = L.circle(pos, 500, {
       color: 'red',
