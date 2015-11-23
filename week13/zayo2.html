@@ -351,7 +351,6 @@ I assumed customers might want to change their services under the "pending chang
 
 // Of the Tranzact accounts without services: How would you prioritize which accounts to
 // go after first and which products would they potentially buy?
-function func5() {
   // Of the Tranzact accounts without services: How would you prioritize which accounts to
 // go after first and which products would they potentially buy?
 // Customers with the highest Sales Volumes from the top three industry/sector pairs,
@@ -359,7 +358,7 @@ function func5() {
 // that are used by current customers in the top-ranking industry/sector pairs.
 function func5() {
 
-   // mrrs = [customer_id, total_mrr]
+  // mrrs = [customer_id, total_mrr]
   var mrrs = _.chain(servicesItems)
     .groupBy( 'Name/ID')
     .mapValues(function(d) {
