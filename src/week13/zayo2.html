@@ -225,7 +225,7 @@ function func3() {
     }))
   })*/
 
-  
+  /*
   var customerFil = _.map(servicesItems,function(n){
     return {"customer":n["Name/ID"],"state":n["State A"],"status":n["Service Status"],"total_MRR": parseFloat(n["Total MRR"].replace(/[^0-9.-]+/g, ''))}
   })
@@ -257,10 +257,42 @@ function func3() {
 
   console.log("cust :",customerFil)
   console.log("customer: ",s)
+
+  var sentence = "The method we used in here is we try to find states where there are companies who contribute the largest MRR. First what I did is I group by the customer Name/Id, and group them by the number of total MRR. The result is that the customer with the id number 64397 has the highest MRR which it is located in WY and CO. So our very first priority is WY followed by CO. The second customer has the second largest MRR, however half of their total MRR came from pending change. Therefore, we pick the third state is AZ and followed by IL and TX."
  
 
-  return "( state: " + _.uniq(s) + "; Account: "+ sortCustomer[0].customer +": " + sortCustomer[0].totalMRR + ")"
-  //console.log("state A: ",active)
+  return "( state: " + _.uniq(s) + "; Account: "+ sortCustomer[0].customer +": " + sortCustomer[0].totalMRR + ")" + sentence
+  //console.log("state A: ",active)*/
+
+  var customerFil = _.map(servicesItems,function(n){
+    return {"customer":n["Name/ID"],"state":n["State A"],"status":n["Service Status"],"total_MRR": parseFloat(n["Total MRR"].replace(/[^0-9.-]+/g, ''))}
+  })
+  // group By customer
+  var cust = _.groupBy(customerFil,function(n){
+    return n.customer
+  })
+  var mapTotalMRR = _.mapValues(cust,function(n){
+      return _.sum(_.map(n,function(d){
+        return d["total_MRR"] 
+      })) 
+  })
+  var mtr = _.map(mapTotalMRR,function(n,k){
+    return {"customer":k,"totalMRR":n}
+  })
+  console.log("totalmrr: ",mapTotalMRR)
+  var sortCustomer = _.sortBy(mtr,'totalMRR').reverse()
+  var state = _.filter(customerFil,function(n){
+    return (n.customer == sortCustomer[0].customer) 
+  })
+  var s = _.map(state,function(n){
+    return n.state
+  })
+  var description = "The method I used in here is I try to find states where there are companies who contribute the largest MRR. The first what I did is I group by the customer Name/Id, and group them by the number of total MRR. The result is that the customer with the id number 64397 has the highest MRR which it is located in WY and CO. So our very first priority is WY followed by CO. The second customer has the second largest MRR, however half of their total MRR came from pending change. Therefore, we pick the third priority state is AZ and followed by IL and TX."
+  var title = '<p><b>Priority States</b></p>'
+  var headers = '<tr><th>States</th><th>Account</th><th>Total MRR</th></tr>'
+  var entries = '<tr><td>' + _.uniq(s) + '</td><td>' + sortCustomer[0].customer + '</td><td>' 
+    + sortCustomer[0].totalMRR + '</td></tr><tr><td>' + sortCustomer[1].state + '</td><td>' + sortCustomer[1].customer +'</td><td>' + sortCustomer[1].totalMRR + '</td></tr><tr><td>' + sortCustomer[2].customer +'</td><td>' + sortCustomer[2].totalMRR + '</td></tr><tr><td>' + sortCustomer[3].customer +'</td><td>' + sortCustomer[3].totalMRR + '</td></tr><tr><td>' + sortCustomer[4].customer +'</td><td>' + sortCustomer[4].totalMRR +'</td></tr>'
+  return title + '<table style="width:40%">' + headers + entries + '</table>' + description + '<img src="q3.png" width="1200">'
 }
 
 // If Zayo sent quotes to all Tranzact accounts, how would you prioritize the customer
