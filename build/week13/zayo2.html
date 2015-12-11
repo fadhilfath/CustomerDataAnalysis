@@ -264,6 +264,8 @@ function func3() {
   return "( state: " + _.uniq(s) + "; Account: "+ sortCustomer[0].customer +": " + sortCustomer[0].totalMRR + ")" + sentence
   //console.log("state A: ",active)*/
 
+  /*
+
   var customerFil = _.map(servicesItems,function(n){
     return {"customer":n["Name/ID"],"state":n["State A"],"status":n["Service Status"],"total_MRR": parseFloat(n["Total MRR"].replace(/[^0-9.-]+/g, ''))}
   })
@@ -292,7 +294,21 @@ function func3() {
   var headers = '<tr><th>States</th><th>Account</th><th>Total MRR</th></tr>'
   var entries = '<tr><td>' + _.uniq(s) + '</td><td>' + sortCustomer[0].customer + '</td><td>' 
     + sortCustomer[0].totalMRR + '</td></tr><tr><td>' + sortCustomer[1].state + '</td><td>' + sortCustomer[1].customer +'</td><td>' + sortCustomer[1].totalMRR + '</td></tr><tr><td>' + sortCustomer[2].customer +'</td><td>' + sortCustomer[2].totalMRR + '</td></tr><tr><td>' + sortCustomer[3].customer +'</td><td>' + sortCustomer[3].totalMRR + '</td></tr><tr><td>' + sortCustomer[4].customer +'</td><td>' + sortCustomer[4].totalMRR +'</td></tr>'
-  return title + '<table style="width:40%">' + headers + entries + '</table>' + description + '<img src="q3.png" width="1200">'
+  return title + '<table style="width:40%">' + headers + entries + '</table>' + description + '<img src="q3.png" width="1200">'*/
+
+  
+  var state = _.groupBy(servicesItems,function(n){
+    return n["State A"]
+  })
+
+  var customer = _.mapValues(state,function(n){
+    return _.uniq(_.map(n,function(d){
+      return d["Name/ID"]
+    }))
+  })
+
+  console.log("groupState: ",customer)
+
 }
 
 // If Zayo sent quotes to all Tranzact accounts, how would you prioritize the customer
