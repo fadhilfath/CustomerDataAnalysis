@@ -233,7 +233,8 @@ function solution9(){
     var furthest = _.sortBy(businessesInPhoenix,"latitude")
     var furthestNorth = _.first(furthest)
     var furthestSouth = _.last(furthest)
-
+    console.log(furthestNorth)
+    console.log(furthestSouth)
 
     return "the furthest McDonald's in north is in the " + furthestNorth.full_address + " and the furthest McDonald's in south is in the " + furthestSouth.full_address
 }
