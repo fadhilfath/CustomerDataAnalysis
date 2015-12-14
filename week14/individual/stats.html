@@ -88,6 +88,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/simple-statistics/1.0.0/simple_statistics.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.js"></script>
+    <script src="http://bigdatahci2015.github.io/data/js/geolib.js"></script>
 
     <script>
 
@@ -138,37 +139,113 @@ function solution1(){
 }
 
 function solution3(){
-    var businessesInGilbert = _.filter(items, {city: 'Gilbert'})
+    var businessesInGilbert = _.filter(items, {city: 'Gilbert',name:"McDonald's"})
     // TODO: find McDonloads and compute the distance between the first two
-    return 'TODO'
+    console.log("data: ",businessesInGilbert)
+    var distance = geolib.getDistance(
+            {latitude: businessesInGilbert[0].latitude, longitude: businessesInGilbert[0].longitude},
+            {latitude: businessesInGilbert[1].latitude, longitude: businessesInGilbert[1].longitude}) / 1000
+    console.log(distance)
+    return "the distance is " + distance + " km"
 }
 
 function solution4(){
-    return 'TODO'
+    var businessesInPhoenix = _.filter(items, {city: 'Phoenix',name:"McDonald's"})
+    console.log("phoenix",businessesInPhoenix)
+    var center = geolib.getCenter(_.map(businessesInPhoenix,function(n){
+      return {'latitude': n.latitude,'longitude':n.longitude}
+    }))
+    console.log(center)
+    return "The geographical center is in the latitude: " + center.latitude + " and longitude: " + center.longitude
 }
 
 function solution5(){
-    return 'TODO'
+    var businessesInPhoenix = _.filter(items, {city: 'Phoenix'})
+
+    var mcdonald = _.filter(businessesInPhoenix,function(n){
+      return n.name == "McDonald's"
+    }).length
+    console.log("mcdonal length",mcdonald)
+    var starbucks = _.filter(businessesInPhoenix,function(n){
+      return n.name == "Starbucks"
+    }).length
+    console.log("starbucks length",starbucks)
+
+    if(mcdonald > starbucks){
+      return "There are more McDonald's in phoenix"
+    }else {
+      return "There are more starbucks in phoenix"
+    }
+    
 }
 
 function solution6(){
-    return 'TODO'
+    var businessesInPhoenix = _.filter(items, {city: 'Phoenix',name:'Starbucks'})
+    console.log(businessesInPhoenix)
+    var starbucks = _.map(businessesInPhoenix,function(n){
+      return {"full_address":n.full_address,"review_count":n.review_count}
+    })
+
+    var mostReview = _.max(starbucks,'review_count')
+    console.log("most:",mostReview)
+
+
+    return "Starbucks with the most review count is in the " + mostReview.full_address
 }
 
 function solution7(){
-    return 'TODO'
+    var businessesInPhoenix = _.filter(items, {city: 'Phoenix',name:'Starbucks'})
+    console.log(businessesInPhoenix)
+    var starbucks = _.map(businessesInPhoenix,function(n){
+      return {"full_address":n.full_address,"review_count":n.review_count,"latitude":n.latitude,"longitude":n.longitude}
+    })
+
+    var mostReview = _.max(starbucks,'review_count')
+    var geoStarbucks = {latitude:mostReview.latitude,longitude:mostReview.longitude}
+
+    var mcdonalPhoenix = _.filter(items, {city: 'Phoenix',name:"McDonald's"})
+    var findmcdonald = _.map(mcdonalPhoenix,function(n){
+      var distance = geolib.getDistance(geoStarbucks,{latitude:n.latitude,longitude:n.longitude})
+      var mc = {dist:distance, full_address:n.full_address}
+      return mc;
+    })
+    var closest = _.min(findmcdonald,'dist')
+    console.log("most",mostReview)
+    return "The closest mcdonalds to this most review starbucks is in the " + closest.full_address
 }
 
 function solution8(){
-    return 'TODO'
+    var businessesInPhoenix = _.filter(items, {city: 'Phoenix',name:'Starbucks'})
+    console.log(businessesInPhoenix)
+    var starbucks = _.map(businessesInPhoenix,function(n){
+      return {"full_address":n.full_address,"review_count":n.review_count,"latitude":n.latitude,"longitude":n.longitude}
+    })
+
+    var mostReview = _.max(starbucks,'review_count')
+    var geoStarbucks = {latitude:mostReview.latitude,longitude:mostReview.longitude}
+    var coffeeshop = _.filter(businessesInPhoenix, function(n){
+        return n['categories'] && _.includes(n['categories'], "Coffee & Tea");
+    });
+    var within2km = _.filter(coffeeshop, function(n){
+        var distance = geolib.getDistance(geoStarbucks,{latitude: n.latitude,  longitude: n.longitude});
+        return distance < 2000
+    }).length
+    return "There are " + within2km + " coffee shop"
 }
 
 function solution9(){
-    return 'TODO'
+    var businessesInPhoenix = _.filter(items, {city: 'Phoenix',name:"McDonald's"})
+    var furthest = _.sortBy(businessesInPhoenix,"latitude")
+    var furthestNorth = _.first(furthest)
+    var furthestSouth = _.last(furthest)
+
+
+    return "the furthest McDonald's in north is in the " + furthestNorth.full_address + " and the furthest McDonald's in south is in the " + furthestSouth.full_address
 }
 
 function solution10(){
-    return 'TODO'
+    var businessesInPhoenix = _.filter(items, {city: 'Phoenix',name:"McDonald's"})
+    console.log(businessesInPhoenix)
 }
 
 function run(id, solutionFunc, data){
@@ -191,15 +268,15 @@ function loadDataThenRunSolutions(){
          run('#e1', example1, items)
          run('#e2', example2, items)
          run('#q1', solution1, items)
-        //  run('#q2', solution2, items)
-        //  run('#q3', solution3, items)
-        //  run('#q4', solution4, items)
-        //  run('#q5', solution5, items)
-        //  run('#q6', solution6, items)
-        //  run('#q7', solution7, items)
-        //  run('#q8', solution8, items)
-        //  run('#q9', solution9, items)
-        //  run('#q10', solution10, items)
+         //run('#q2', solution2, items)
+         run('#q3', solution3, items)
+         run('#q4', solution4, items)
+         run('#q5', solution5, items)
+         run('#q6', solution6, items)
+         run('#q7', solution7, items)
+         run('#q8', solution8, items)
+         run('#q9', solution9, items)
+         run('#q10', solution10, items)
      })
      .fail(function(err){
          console.error(err)
